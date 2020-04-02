@@ -21,17 +21,16 @@ int main(int argc, char **argv) {
 			// mx_buff expand if required
 			if (mx_len + 1 > mx_size) {
 				// alloc
-				char ** n_mx = malloc(sizeof(char *) * (mx_len + LTU_CHUNK));
-				if (n_mx == NULL) {
-					printf("Error at malloc 1\n");
+				if (mx != NULL) {
+					mx = malloc(sizeof(char *) * LTU_CHUNK);
+				} else {
+					mx = realloc(mx, sizeof(char *) * (mx_len + LTU_CHUNK));
+				}
+				if (mx == NULL) {
+					printf("Error at malloc/realloc 1\n");
 					exit(-1);
 				}
-				// clone if present
-				if (mx != NULL) {
-					memcpy(n_mx, mx, mx_len);
-				}
 				mx_size += LTU_CHUNK;
-				mx = n_mx;
 			}
 			// Finalize current line
 			str[str_len] = '\0';
@@ -61,17 +60,16 @@ int main(int argc, char **argv) {
 			// str_buff expand (keep allways space for next \0
 			if (str_len + 2 > str_size) {
 				// alloc
-				char * n_str = malloc(sizeof(char) * (str_size + STR_CHUNK));
-				if (n_str == NULL) {
-					printf("Error at malloc 2\n");
+				if (str == NULL) {
+					str = malloc(sizeof(char) * STR_CHUNK);
+				} else {
+					str = realloc(str, sizeof(char) * (str_size + STR_CHUNK));
+				}
+				if (str == NULL) {
+					printf("Error at malloc/realloc 2\n");
 					exit(-1);
 				}
-				// clone if present
-				if (str != NULL) {
-					memcpy(n_str, str, str_size);
-				}
 				str_size += STR_CHUNK;
-				str = n_str;
 			}
 			// assign
 			str[str_len] = next;

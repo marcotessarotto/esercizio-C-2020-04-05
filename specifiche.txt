@@ -13,15 +13,16 @@ che si ripresenta)
 
 il programma termina in caso di EOF su stdin.
 
-esempio:
+esempio, I: significa input proveniente da stdin, O: indica l'output del programma su stdout
 
-xyz0000
-1234
-0000
-zzzzz
-1234
-abcdefg
-1234
-***questa riga è stata già letta 2 righe fa***
-***questa riga è stata già letta 5 righe fa***
+I: xyz0000
+I: 1234
+I: 0000
+I: zzzzz
+I: 1234
+O: ***questa riga è stata già letta 3 righe fa***
+I: abcdefg
+I: 1234
+O: ***questa riga è stata già letta 2 righe fa***
+O: ***questa riga è stata già letta 5 righe fa***
 

@@ -40,7 +40,9 @@ int main (int argc, char * argv []) {
             i = 0;
         }
     }
+    
     free (array_char);
     free (tot_array);
+    
     return 0;
 }

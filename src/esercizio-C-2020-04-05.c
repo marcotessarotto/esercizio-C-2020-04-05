@@ -23,7 +23,15 @@ int main (int argc, char * argv []) {
     int counter = 0;
     unsigned int length = 1;
     char * array_char = calloc(length, sizeof(char));
+    if(array_char == NULL){
+        printf("calloc error!");
+        exit(1);
+    }
     char ** tot_array = calloc(length, sizeof(char *));
+    if(tot_array == NULL){
+        printf("calloc error!");
+        exit(1);
+    }
     while((input = getchar()) != EOF){
         if(input != '\n'){
             array_char[i] = input;

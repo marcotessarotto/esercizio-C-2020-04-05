@@ -35,7 +35,7 @@ abcdefg
 
 void verify(char ** array, int dim)
 {
-	for(int i=dim-2; i>0; i--)
+	for(int i=dim-2; i>=0; i--)
 	{
 		if(memcmp(&(array[dim-1]), &(array[i]), dim * sizeof(char))==0)
 			printf("questa riga è stata già letta %d righe fa\n", dim-i-1);

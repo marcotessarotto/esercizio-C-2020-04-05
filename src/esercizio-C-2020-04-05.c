@@ -36,70 +36,71 @@ I: 1234
 O: ***questa riga è stata già letta 2 righe fa***
 O: ***questa riga è stata già letta 5 righe fa***
  */
-void verify_row(char ** tot, int length, int counter);
 
-unsigned int rows_counter = 0;
+char * get_row(char * rows, int n_rows);
+
+
 
 int main(int argc, char *argv[]) {
-	int c;
-	unsigned int char_counter = 0;
-	unsigned int size = 1;
+	unsigned int rows_counter = 0;
+	unsigned int length = 1;
 
-	char * row;
-	char ** all_rows;
+	char * rows;
 
-	row = calloc(size, sizeof(char));
-	all_rows = calloc(size, sizeof(char *));
+	rows = calloc(length, sizeof(char));
 
-	if ((row == NULL) || (all_rows == NULL)) {
+	if (rows == NULL) {
 		perror("calloc error\n");
 		exit(EXIT_FAILURE);
 	}
 
 	printf("Insert text: ");
 
-	while ((c = getchar()) != EOF) {
-
-		if (c == '\n') {
+	while ((rows[length - 1] = getchar()) != EOF) {
+		if(rows[length - 1] == '\n'){
 			rows_counter++;
-			all_rows = realloc(all_rows, rows_counter * sizeof(char *));
-
-			if (all_rows == NULL) {
-				perror("realloc error\n");
-				exit(EXIT_FAILURE);
+			if (rows_counter > 1) {
+				char * current_row = get_row(rows, rows_counter);
+				for(int i = rows_counter - 1; i > 0; i--){
+					if(strcmp(current_row, get_row(rows, i)) == 0) {
+						if ((rows_counter - i) == 1)
+							printf("***questa riga è stata già letta %d riga fa***\n", rows_counter - i);
+						else
+							printf("***questa riga è stata già letta %d righe fa***\n", rows_counter - i);
+					}
+				}
 			}
+			printf("Insert text: ");
+		}
 
-			memcpy(&(all_rows[rows_counter-1]), row, size * sizeof(char));
-			verify_row(all_rows, size, rows_counter);
+		length++;
 
-			size = 0;
-			char_counter = 0;
-			printf("\nInsert text: ");
-		} else {
-			row[char_counter] = c;
-			size++;
-			row = realloc(row, size * sizeof(char));
-			if (row == NULL) {
-				perror("realloc error\n");
-				exit(EXIT_FAILURE);
-			}
-			char_counter++;
+		rows = realloc(rows, length * sizeof(char));
+
+		if (rows == NULL) {
+			printf("realloc error!\n");
+			exit(EXIT_FAILURE);
 		}
 	}
 
-	free(all_rows);
+	free(rows);
 
 	exit(EXIT_SUCCESS);
 }
 
-void verify_row(char ** rows, int size, int num_of_rows) {
-    int index_row = num_of_rows - 1;
-    for (int i = num_of_rows - 2; i >= 0; i--){
-        int check = memcmp(&(rows[index_row]), &(rows[i]), size * sizeof(char));
-        if (check == 0){
-            int find_at = index_row - i;
-            printf("\n***questa riga è stata già letta %d righe fa***\n", find_at);
-        }
-    }
+char * get_row(char * rows, int n_rows) {
+	char rows_sep[] = "\n";
+	char *rows_cpy = strdup(rows);
+	char *row;
+
+	row = strtok(rows_cpy, rows_sep);
+	n_rows--;
+
+	while(n_rows > 0){
+		row = strtok(NULL, rows_sep);
+		n_rows--;
+	}
+
+	return row;
 }
 

@@ -37,7 +37,7 @@ O: ***questa riga è stata già letta 2 righe fa***
 O: ***questa riga è stata già letta 5 righe fa***
  */
 
-char * get_row(char * rows, int n_rows);
+char * get_row(char * rows, unsigned int n_rows);
 
 
 
@@ -84,21 +84,22 @@ int main(int argc, char *argv[]) {
 	}
 
 	free(rows);
+	printf("\nExit, goodbye.\n");
 
 	exit(EXIT_SUCCESS);
 }
 
-char * get_row(char * rows, int n_rows) {
+char * get_row(char * rows, unsigned int n_rows) {
+	int index_row = n_rows - 1;
 	char rows_sep[] = "\n";
 	char *rows_cpy = strdup(rows);
 	char *row;
 
 	row = strtok(rows_cpy, rows_sep);
-	n_rows--;
 
-	while(n_rows > 0){
+	while(index_row > 0){
 		row = strtok(NULL, rows_sep);
-		n_rows--;
+		index_row--;
 	}
 
 	return row;

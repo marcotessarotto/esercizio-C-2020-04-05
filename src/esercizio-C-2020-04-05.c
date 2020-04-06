@@ -1,19 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-char* parseRaw(char *rawString, int rawNumber);
+char* parseRaw(char *rowString, int rowNumber);
 
 int main(int argc, char **argv) {
 	int c;
 	int size = 1;
-	int rawNumber = 0;
+	int rowNumber = 0;
 
 	char *str;
 	str = malloc(sizeof(char) * size);
 	printf("I: ");
 	while ((c = getchar()) != EOF) {
 		if (c == '\n') {
-			rawNumber++;
+			rowNumber++;
 			str[size - 1] = c;
 			size++;
 			str = realloc(str, sizeof(char) * (size));
@@ -21,9 +21,9 @@ int main(int argc, char **argv) {
 				printf("realloc error!\n");
 				exit(EXIT_FAILURE);
 			}
-			if (rawNumber > 1) {
-				char *raw = parseRaw(str, rawNumber);
-				for (int i = 0; i < rawNumber - 1; i++) {
+			if (rowNumber > 1) {
+				char *raw = parseRaw(str, rowNumber);
+				for (int i = 0; i < rowNumber - 1; i++) {
 					if (strcmp(raw, parseRaw(str, i)) == 0) {
 						printf("***Questa riga è stata già letta alla riga %d***\n",i);
 					}
@@ -42,11 +42,11 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-char* parseRaw(char *rawString, int rawNumber) {
-	int rowIndex = rawNumber - 1;
+char* parseRaw(char *rowString, int rowNumber) {
+	int rowIndex = rowNumber - 1;
 
 	char separator[] = "\n";
-	char *rowCopy = strdup(rawString);
+	char *rowCopy = strdup(rowString);
 
 	char *row = strtok(rowCopy, separator);
 

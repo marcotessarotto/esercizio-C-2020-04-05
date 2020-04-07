@@ -92,5 +92,7 @@ int main(int argc, char **argv) {
 			counter=0;
 		}
 	}
+	
+	return 0;
 
 }

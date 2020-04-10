@@ -12,9 +12,8 @@ typedef struct{
 }line;
 
 
-void compare_lines(line * lines, int number_of_lines);
+void determines_duplicates(line * lines, int number_of_lines);
 int compare_array(char *char_array1, int length_char_array1 ,char *char_array2, int length_char_array2);
-//void print_line(line lines); //for TEST only
 
 int main(int argc, char *argv[]) {
 
@@ -24,6 +23,7 @@ int main(int argc, char *argv[]) {
 	char ch;
 	ch = getchar();
 	int counts_chars_on_one_line = 1;
+	int last_alloc_dimension = -1;
 
 
 	while(ch != EOF){
@@ -35,30 +35,35 @@ int main(int argc, char *argv[]) {
 				perror("realloc error!");
 				exit(EXIT_FAILURE);
 			}
-			compare_lines(lines, number_of_lines);
+			last_alloc_dimension = -1;
+			determines_duplicates(lines, number_of_lines);
 		}else{
-			lines[number_of_lines -1].char_array = realloc(lines[number_of_lines -1].char_array, counts_chars_on_one_line * sizeof(char));
+			if(counts_chars_on_one_line > last_alloc_dimension){
+				if(last_alloc_dimension < 0){
+					last_alloc_dimension = last_alloc_dimension * -1;
+				}else{
+					last_alloc_dimension = last_alloc_dimension * 2;
+				}
+
+				lines[number_of_lines -1].char_array = realloc(lines[number_of_lines -1].char_array, last_alloc_dimension * sizeof(char));
+				if (lines[number_of_lines -1].char_array == NULL) {
+					perror("realloc error!");
+					exit(EXIT_FAILURE);
+				}
+			}
 			lines[number_of_lines -1].char_array[counts_chars_on_one_line -1] = ch;
 			lines[number_of_lines -1].length_char_array = counts_chars_on_one_line;
 
-			if (lines[number_of_lines -1].char_array == NULL) {
-				perror("realloc error!");
-				exit(EXIT_FAILURE);
-			}
 		}
 		ch = getchar();
 		counts_chars_on_one_line++;
 	}
-	/* for TEST only
-	for(int i=0 ; i<number_of_lines ; i++){
-		print_line(lines[i]);
-	}
-	*/
+
 	putchar('\n');
 	return EXIT_SUCCESS;
 }
 
-void compare_lines(line *lines, int number_of_lines){
+void determines_duplicates(line *lines, int number_of_lines){
 	int righe_fa = 1;
 	for(int i=number_of_lines - 3 ; i>=0 ; i--){
 		if(compare_array( 	lines[number_of_lines -2].char_array,
@@ -84,14 +89,3 @@ int compare_array(char *char_array1, int length_char_array1 ,char *char_array2, 
 	return TRUE;
 }
 
-/* for TEST only
-void print_line(line lines){
-	if(lines.char_array != NULL){
-		printf("[");
-		for( int i=0 ; i<lines.length_char_array ; i++){
-			printf("%c ", lines.char_array[i]);
-		}
-		printf("]\n");
-	}
-}
-*/

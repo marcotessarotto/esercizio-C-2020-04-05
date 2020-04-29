@@ -94,10 +94,10 @@ int main(){
 
 		checklines(riga, contachar);
 
-		free(riga);
-
-		riga = malloc(stdline*sizeof(char));
-		checkmalloc(riga);
+		if(memset(riga, 0, stdline*sizeof(char)) == NULL){
+			perror("memset()");
+			exit(EXIT_FAILURE);
+		}
 
 		contarighe++;
 		contachar=0;
@@ -105,7 +105,7 @@ int main(){
 
 	}
 
-	printf("Ho ricevuto EOF, termino!\n");
+	printf("\n\nHo ricevuto EOF, termino!\n");
 
 return 0;
 

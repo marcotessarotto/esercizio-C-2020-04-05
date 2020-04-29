@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
 
 #include <errno.h>
 
@@ -23,24 +24,17 @@ void checklines(char * line, int length){
 	int check =0;
 	int contatore;
 
-	if(contarighe>1){
+	if(contarighe>=1){
 
 		for(int i=0; i<contarighe; i++){
 
-			if(length == righe[i].lunghezza && line[0] == righe[i].riga[0]){
+			if(righe[i].lunghezza == length){
 
-				contatore=0;
+			contatore = memcmp(righe[i].riga, line, length*sizeof(char));
 
-				for(int j=1; j<righe[i].lunghezza; j++){
-
-					if(line[j] == righe[i].riga[j])
-					contatore++;
-				}
-
-				if(contatore == length){
-					check = contarighe-i;
-					printf("Questa riga è apparsa %d righe fa\n", check);
-					return;
+			if(contatore == 0){
+				check = contarighe-i;
+				printf("Questa riga è apparsa %d righe fa\n", check);
 				}
 			}
 		}
@@ -92,21 +86,14 @@ int main(){
 
 		if(c == '\n'){
 
-			if(contarighe>1){
+		righe = realloc(righe,(contarighe+1)*sizeof(stringhe));
+		checkmalloc(righe);
 
-				righe = realloc(righe, contarighe*(sizeof(stringhe)));
-				checkrealloc(righe);
+		righe[contarighe].lunghezza = contachar;
 
-			}
+		righe[contarighe].riga = malloc((contachar)*sizeof(char));
 
-		righe[contarighe].lunghezza = contachar-1;
-
-		righe[contarighe].riga = malloc((contachar-1)*sizeof(char));
-
-		for(int i=0; i<contachar; i++){
-
-			righe[contarighe].riga[i] = riga[i];
-		}
+		memcpy(righe[contarighe].riga, riga, contachar*sizeof(char));
 
 		checklines(riga, contachar);
 
@@ -120,6 +107,8 @@ int main(){
 		}
 
 	}
+
+	printf("Ho ricevuto EOF, termino!\n");
 
 return 0;
 
